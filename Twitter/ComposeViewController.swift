@@ -25,7 +25,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate {
         handleNameLabel.text = User.currentUser!.username
         userNameLabel.text = "@" + User.currentUser!.screenname
         if replyToId != nil && replyToUserName != nil {
-            textView.text = "@\(replyToUserName!)"
+            textView.text = "@\(replyToUserName!) "
         } else {
             textView.text = ""
         }
