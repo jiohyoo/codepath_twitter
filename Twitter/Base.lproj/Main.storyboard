@@ -154,6 +154,9 @@
                     <navigationItem key="navigationItem" title="Timeline" id="6xB-Su-U4N">
                         <barButtonItem key="leftBarButtonItem" title="Logout" id="n3E-A6-NLf">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <connections>
+                                <action selector="logoutTouchUpInside:" destination="ysh-ua-UYM" id="zrC-jU-7eF"/>
+                            </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="New" id="UAk-FE-mrX">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -428,7 +431,7 @@ Label</string>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="VgZ-M3-cDw"/>
+        <segue reference="xMS-rQ-MjI"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
 </document>

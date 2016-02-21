@@ -17,6 +17,7 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @IBAction func logoutTouchUpInside(sender: AnyObject) {
         User.currentUser?.logout()
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
@@ -42,6 +43,7 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     func refreshControlAction(refreshControl: UIRefreshControl) {
         MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         TwitterClient.sharedInstance.homeTimelineWithParams(nil) { (tweets, error) -> () in
+            print(error)
             self.tweets = tweets
             self.tableView.reloadData()
             refreshControl.endRefreshing()
