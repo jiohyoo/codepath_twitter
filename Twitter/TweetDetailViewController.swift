@@ -19,7 +19,7 @@ class TweetDetailViewController: UIViewController {
     @IBOutlet weak var favoritesCountLabel: UILabel!
     @IBOutlet weak var retweetImageView: UIImageView!
     @IBOutlet weak var favoriteImageView: UIImageView!
-    
+    @IBOutlet weak var replyImageView: UIImageView!
     var tweet: Tweet?
     
     override func viewDidLoad() {
@@ -48,6 +48,7 @@ class TweetDetailViewController: UIViewController {
             } else {
                 favoriteImageView.image = UIImage(named: "like-action")
             }
+            replyImageView.image = UIImage(named: "reply-action")
         }
     }
 
@@ -56,15 +57,57 @@ class TweetDetailViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    @IBAction func onRetweetTap(sender: AnyObject) {
+        if let tweet = tweet {
+            if tweet.retweeted {
+                TwitterClient.sharedInstance.unretweet(tweet.id, completion: { (error) -> () in
+                })
+                tweet.retweetCount -= 1
+                tweet.retweeted  = false
+            } else {
+                TwitterClient.sharedInstance.retweet(tweet.id, completion: { (error) -> () in
+                })
+                tweet.retweetCount += 1
+                tweet.retweeted  = true
+            }
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+            if tweet.retweeted {
+                retweetImageView.image = UIImage(named: "retweet-action-on")
+            } else {
+                retweetImageView.image = UIImage(named: "retweet-action")
+            }
+            retweetCountLabel.text = String(tweet.retweetCount)
+        }
     }
-    */
+    
+    @IBAction func onFavoriteTap(sender: AnyObject) {
+        if let tweet = tweet {
+            if tweet.favorited {
+                TwitterClient.sharedInstance.unfavorite(tweet.id, completion: { (error) -> () in
+                })
+                tweet.favoritesCount -= 1
+                tweet.favorited  = false
+            } else {
+                TwitterClient.sharedInstance.favorite(tweet.id, completion: { (error) -> () in
+                })
+                tweet.favoritesCount += 1
+                tweet.favorited  = true
+            }
+            
+            if tweet.favorited {
+                favoriteImageView.image = UIImage(named: "like-action-on")
+            } else {
+                favoriteImageView.image = UIImage(named: "like-action")
+            }
+            favoritesCountLabel.text = String(tweet.favoritesCount)
+        }
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if let vc = segue.destinationViewController as? ComposeViewController {
+            vc.replyToId = tweet?.id
+            vc.replyToUserName = tweet?.user.screenname
+        }
+    }
 
 }

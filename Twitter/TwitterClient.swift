@@ -12,6 +12,7 @@ let twitterConsumerKey = "8a0fmHoQXA7GqzgWIgDA9SrJB"
 let twitterConsumerSecret = "Bn07h4tTlD1I87D8kTwCyxo8CNHLK08l36UPpC3FHi5hpD2wba"
 let twitterBaseURL = NSURL(string: "https://api.twitter.com")
 
+let tweetDidPostNotification = "tweetDidPostNotification"
 
 class TwitterClient: BDBOAuth1SessionManager {
     
@@ -77,4 +78,70 @@ class TwitterClient: BDBOAuth1SessionManager {
         })
     }
     
+    func postTweet(text: String, inReplyTo: String?, completion: (error: NSError?) -> ()) {
+        let params = NSMutableDictionary()
+        params.setValue(text, forKey: "status")
+        if let inReplyTo = inReplyTo {
+            params.setValue(inReplyTo, forKey: "in_reply_to_status_id")
+        }
+        
+        POST("1.1/statuses/update.json", parameters: params, progress: nil,
+            success: { (task: NSURLSessionDataTask, response: AnyObject?) -> Void in
+                NSNotificationCenter.defaultCenter().postNotificationName(tweetDidPostNotification, object: nil)
+                completion(error: nil)
+            }, failure: { (task: NSURLSessionDataTask?, error: NSError) -> Void in
+                print(error)
+                completion(error: error)
+        })
+    }
+    
+    func retweet(id: String, completion: (error: NSError?) -> ()) {
+        POST("1.1/statuses/retweet/\(id).json", parameters: nil, progress: nil,
+            success: { (task: NSURLSessionDataTask, response: AnyObject?) -> Void in
+                NSNotificationCenter.defaultCenter().postNotificationName(tweetDidPostNotification, object: nil)
+                completion(error: nil)
+            }, failure: { (task: NSURLSessionDataTask?, error: NSError) -> Void in
+                print(error)
+                completion(error: error)
+        })
+    }
+    func unretweet(id: String, completion: (error: NSError?) -> ()) {
+        POST("1.1/statuses/unretweet/\(id).json", parameters: nil, progress: nil,
+            success: { (task: NSURLSessionDataTask, response: AnyObject?) -> Void in
+                NSNotificationCenter.defaultCenter().postNotificationName(tweetDidPostNotification, object: nil)
+                completion(error: nil)
+            }, failure: { (task: NSURLSessionDataTask?, error: NSError) -> Void in
+                print(error)
+                completion(error: error)
+        })
+    }
+
+    
+    func favorite(id: String, completion: (error: NSError?) -> ()) {
+        let params = NSMutableDictionary()
+        params.setValue(id, forKey: "id")
+        POST("1.1/favorites/create.json", parameters: params, progress: nil,
+            success: { (task: NSURLSessionDataTask, response: AnyObject?) -> Void in
+                NSNotificationCenter.defaultCenter().postNotificationName(tweetDidPostNotification, object: nil)
+                completion(error: nil)
+            }, failure: { (task: NSURLSessionDataTask?, error: NSError) -> Void in
+                print(error)
+                completion(error: error)
+        })
+    }
+    func unfavorite(id: String, completion: (error: NSError?) -> ()) {
+        let params = NSMutableDictionary()
+        params.setValue(id, forKey: "id")
+        POST("1.1/favorites/destroy.json", parameters: params, progress: nil,
+            success: { (task: NSURLSessionDataTask, response: AnyObject?) -> Void in
+                NSNotificationCenter.defaultCenter().postNotificationName(tweetDidPostNotification, object: nil)
+                completion(error: nil)
+            }, failure: { (task: NSURLSessionDataTask?, error: NSError) -> Void in
+                print(error)
+                completion(error: error)
+        })
+    }
+
+    
+
 }

@@ -28,12 +28,15 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         refreshControl.addTarget(self, action: "refreshControlAction:", forControlEvents: UIControlEvents.ValueChanged)
         tableView.insertSubview(refreshControl, atIndex: 0)
 
-
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "refreshOnly", name: tweetDidPostNotification, object: nil)
+        refreshOnly()
+        // Do any additional setup after loading the view.
+    }
+    func refreshOnly() {
         TwitterClient.sharedInstance.homeTimelineWithParams(nil) { (tweets, error) -> () in
             self.tweets = tweets
             self.tableView.reloadData()
         }
-        // Do any additional setup after loading the view.
     }
 
     func refreshControlAction(refreshControl: UIRefreshControl) {
@@ -62,9 +65,12 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        let vc = segue.destinationViewController as! TweetDetailViewController
-        let indexPath = tableView.indexPathForCell(sender as! UITableViewCell)
-        vc.tweet = self.tweets![indexPath!.row]
-        print("vc")
+        if let vc = segue.destinationViewController as? TweetDetailViewController {
+            let indexPath = tableView.indexPathForCell(sender as! UITableViewCell)
+            vc.tweet = self.tweets![indexPath!.row]
+        } else if let vc = segue.destinationViewController as? ComposeViewController {
+            vc.replyToId = nil
+            vc.replyToUserName = nil
+        }
     }
 }
