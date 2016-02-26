@@ -8,8 +8,8 @@
 
 import UIKit
 import BDBOAuth1Manager
-let twitterConsumerKey = "8a0fmHoQXA7GqzgWIgDA9SrJB"
-let twitterConsumerSecret = "Bn07h4tTlD1I87D8kTwCyxo8CNHLK08l36UPpC3FHi5hpD2wba"
+let twitterConsumerKey = "x1pRzaSwxMtmP0imi5mBIJcJc"
+let twitterConsumerSecret = "Mprqo7T3q8S0hoI0q5IWfzeVGW8ePWqpLkQ46ZifaR8LjTitVR"
 let twitterBaseURL = NSURL(string: "https://api.twitter.com")
 
 let tweetDidPostNotification = "tweetDidPostNotification"
