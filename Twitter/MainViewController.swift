@@ -34,7 +34,7 @@ class MainViewController: UIViewController {
             contentsView.addSubview(contentsViewController.view)
             contentsViewController.didMoveToParentViewController(self)
             
-            UIView.animateWithDuration(2.0, animations: { () -> Void in
+            UIView.animateWithDuration(0.3, animations: { () -> Void in
                 self.contentsViewLeadingContraint.constant = 0
                 self.view.layoutIfNeeded()
             })
@@ -74,7 +74,7 @@ class MainViewController: UIViewController {
         case .Ended:
             UIView.animateWithDuration(0.3, animations: { () -> Void in
                 if velocity.x > 0 {
-                    self.contentsViewLeadingContraint.constant = self.view.frame.size.width - 50
+                    self.contentsViewLeadingContraint.constant = self.view.frame.size.width - 30
                 } else {
                     self.contentsViewLeadingContraint.constant = 0
                 }

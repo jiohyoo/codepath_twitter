@@ -27,7 +27,7 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         timelineNavigationViewController = storyboard?.instantiateViewControllerWithIdentifier("TimelineNavigationViewController")
         profileNavigationViewController = storyboard?.instantiateViewControllerWithIdentifier("TimelineNavigationViewController")
-        mentionsNavigationViewController = storyboard?.instantiateViewControllerWithIdentifier("TimelineNavigationViewController")
+        mentionsNavigationViewController = storyboard?.instantiateViewControllerWithIdentifier("MentionsNavigationViewController")
         navigationViewControllers.append(timelineNavigationViewController)
         navigationViewControllers.append(profileNavigationViewController)
         navigationViewControllers.append(mentionsNavigationViewController)
