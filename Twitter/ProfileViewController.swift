@@ -9,7 +9,7 @@
 import UIKit
 import MBProgressHUD
 
-class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, TweetTableViewCellDelegate {
     var tweets: [Tweet]?
 
     @IBOutlet weak var tableView: UITableView!
@@ -26,6 +26,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     var user: User? {
         didSet {
+            self.view.layoutIfNeeded()
             if let user = user {
                 profileImageView.setImageWithURL(NSURL(string: user.profileImageUrl)!)
                 if let profileBackgroundImageUrl = user.profileBackgroundImageUrl {
@@ -51,6 +52,9 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         if user == nil {
             user = User.currentUser
         }
+        
+        self.navigationController?.navigationItem.rightBarButtonItem = nil
+        
         tableView.dataSource = self
         tableView.delegate = self
         tableView.rowHeight = UITableViewAutomaticDimension
@@ -65,7 +69,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         // Do any additional setup after loading the view.
     }
     func refreshOnly() {
-        TwitterClient.sharedInstance.userTimelineWithParams(User.currentUser!) { (tweets, error) -> () in
+        TwitterClient.sharedInstance.userTimelineWithParams(user!) { (tweets, error) -> () in
             self.tweets = tweets
             self.tableView.reloadData()
         }
@@ -73,7 +77,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func refreshControlAction(refreshControl: UIRefreshControl) {
         MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-        TwitterClient.sharedInstance.userTimelineWithParams(User.currentUser!) { (tweets, error) -> () in
+        TwitterClient.sharedInstance.userTimelineWithParams(user!) { (tweets, error) -> () in
             print(error)
             self.tweets = tweets
             self.tableView.reloadData()
@@ -93,9 +97,18 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("TweetTableViewCell") as! TweetTableViewCell
         cell.tweet = tweets![indexPath.row]
+        cell.delegate = self
         return cell
     }
     
+    func tweetTableViewCell(tweetTableViewCell: TweetTableViewCell, didTapProfileImage value: User) {
+        let vc = self.storyboard?.instantiateViewControllerWithIdentifier("ProfileViewController") as! ProfileViewController
+        vc.user = value
+        
+        self.navigationController?.pushViewController(vc, animated: true)
+        
+        print("herer", value)
+    }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let vc = segue.destinationViewController as? TweetDetailViewController {

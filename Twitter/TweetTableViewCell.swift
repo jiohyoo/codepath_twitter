@@ -8,6 +8,10 @@
 
 import UIKit
 
+@objc protocol TweetTableViewCellDelegate {
+    optional func tweetTableViewCell(tweetTableViewCell: TweetTableViewCell, didTapProfileImage value: User)
+}
+
 class TweetTableViewCell: UITableViewCell {
 
     @IBOutlet weak var profileImageView: UIImageView!
@@ -15,6 +19,8 @@ class TweetTableViewCell: UITableViewCell {
     @IBOutlet weak var userNameLabel: UILabel!
     @IBOutlet weak var createdTimeLabel: UILabel!
     @IBOutlet weak var tweetTextLabel: UILabel!
+    
+    weak var delegate: TweetTableViewCellDelegate?
     
     var tweet: Tweet? {
         didSet {
@@ -26,7 +32,17 @@ class TweetTableViewCell: UITableViewCell {
                 createdTimeLabel.text = makeCreatedTimeLabelText(interval)
                 tweetTextLabel.text = tweet.text
             }
+            let tapG = UITapGestureRecognizer(target: self, action: "onTap:")
+            profileImageView.userInteractionEnabled =  true
+            profileImageView.addGestureRecognizer(tapG)
         }
+    }
+    
+    func onTap(sender: UITapGestureRecognizer) {
+        if delegate != nil {
+            delegate!.tweetTableViewCell!(self, didTapProfileImage: tweet!.user)
+        }
+        print(tweet!.user)
     }
     
     func makeCreatedTimeLabelText(val: Int) -> String {
@@ -42,6 +58,7 @@ class TweetTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        print("hi")
         // Initialization code
     }
 

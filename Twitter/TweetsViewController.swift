@@ -9,7 +9,7 @@
 import UIKit
 import MBProgressHUD
 
-class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, TweetTableViewCellDelegate {
     var tweets: [Tweet]?
 
     @IBOutlet weak var tableView: UITableView!
@@ -62,7 +62,17 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("TweetTableViewCell") as! TweetTableViewCell
         cell.tweet = tweets![indexPath.row]
+        cell.delegate = self
         return cell
+    }
+    
+    func tweetTableViewCell(tweetTableViewCell: TweetTableViewCell, didTapProfileImage value: User) {
+        let vc = self.storyboard?.instantiateViewControllerWithIdentifier("ProfileViewController") as! ProfileViewController
+        vc.user = value
+        
+        self.navigationController?.pushViewController(vc, animated: true)
+        
+        print("herer", value)
     }
     
 
