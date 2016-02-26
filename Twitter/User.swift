@@ -14,18 +14,29 @@ let currentUserKey = "currentUserKey"
 let userDidLoginNotification = "userDidLoginNotification"
 let userDidLogoutNotification = "userDidLogoutNotification"
 class User: NSObject {
+    var dict: NSDictionary
+
+    var id: String
     var username: String
     var screenname: String
     var profileImageUrl: String
-    var tagline: String
-    var dict: NSDictionary
+    var userDescription: String
+    var profileBackgroundImageUrl: String?
+    var numFollowing: Int
+    var numFollowers: Int
+    var numTweets: Int
     
     init(dict: NSDictionary) {
         self.dict = dict
+        id = dict["id_str"] as! String
         username = dict["name"] as! String
         screenname = dict["screen_name"] as! String
         profileImageUrl = dict["profile_image_url"] as! String
-        tagline = dict["description"] as! String
+        userDescription = dict["description"] as! String
+        profileBackgroundImageUrl = dict["profile_background_image_url"] as? String ?? nil
+        numFollowing = dict["friends_count"] as! Int
+        numFollowers = dict["followers_count"] as! Int
+        numTweets = dict["statuses_count"] as! Int
     }
     
     func logout() {
