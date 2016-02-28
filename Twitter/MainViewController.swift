@@ -30,11 +30,13 @@ class MainViewController: UIViewController {
             }
             
             view.layoutIfNeeded()
-            contentsViewController.willMoveToParentViewController(self)
+            addChildViewController(contentsViewController)
+            contentsViewController.view.frame = contentsView.bounds
             contentsView.addSubview(contentsViewController.view)
             contentsViewController.didMoveToParentViewController(self)
-            
+
             UIView.animateWithDuration(0.3, animations: { () -> Void in
+                print(self.contentsView.constraints)
                 self.contentsViewLeadingContraint.constant = 0
                 self.view.layoutIfNeeded()
             })

@@ -69,10 +69,7 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     func tweetTableViewCell(tweetTableViewCell: TweetTableViewCell, didTapProfileImage value: User) {
         let vc = self.storyboard?.instantiateViewControllerWithIdentifier("ProfileViewController") as! ProfileViewController
         vc.user = value
-        
         self.navigationController?.pushViewController(vc, animated: true)
-        
-        print("herer", value)
     }
     
 
